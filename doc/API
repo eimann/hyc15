@@ -1,0 +1,42 @@
+Commands: GetId, SetColor, UpdateAccel
+
+GetId: The GetId command returns an Id used by the client to identify himself.
+This UUID will be included in all Set and Update request by the client and is only
+valid per session and will be purged from the buffer after 600 seconds.
+The GetId should also be considered to be used for XSRF if required.
+
+Request:
+"id": ""
+
+Response:
+"id": "$(GENERATED_UUID)"
+
+
+
+SetColor: After the GetId returned a UUID for the client, the client can
+set their color to start playing. The client will use a color chooser.
+
+Request:
+"id": "$(UUID)",
+"color": "$(HEXVALUE)"
+
+Response:
+"id": "$(UUID)",
+"message": "SetColor successful."
+
+
+
+UpdateAccel: After setting their color, the client starts sending updates
+from the device accelerometer, these updates should only occur every 1000 ms.
+Maybe setting the update interval to 500 ms will work too, but this depends
+on the queue/buffer handling on the backend.
+
+Request:
+"id": "$(UUID)",
+"xaxis": "FIXME x-axis position",
+"yaxis": "FIXME y-axis position",
+"zacis": "FIXME z-axis position"
+
+Response:
+"id": "$(UUID)",
+"message": "UpdateAccel inserted."
