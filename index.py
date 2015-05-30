@@ -15,13 +15,13 @@ class MainHandler(tornado.web.RequestHandler):
         self.write("This is the RevealYourCity backend service. Nothing to see here.")
 
 class IdHandler(tornado.web.RequestHandler):
-    def get.self(self):
+    def get(self):
         message = {
             "id": str(uuid.uuid4()),
         } 
 
 class ColorHandler(tornado.web.RequestHandler):
-    def post.self(self):
+    def post(self):
         message = {
             "id": str(uuid.uuid4()),
             "color": self.get_argument("color"),
