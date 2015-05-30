@@ -30,9 +30,14 @@
 
 <button id="OkButton">OK</button>
 <script>
+     currentColor+=1;
+   // fetch client Id from server
+   $.getJSON( "GetId", { get_param: 'id' }, function(data) { $.each(data, function(index, element) { $('body').append($('<div>', { text: element.name })); }); });
+
+   // post color and client Id to session database
    $(document).ready(function(){
        $('#OkButton').click(function() {
-	   $.ajax({ method: "POST", contentType: "application/json", url: "http://31.172.101.252:8080/SetColor", data: JSON.stringify({ color: colors[(currentColor - 1) % colors.length] }), cache: false });
+	   $.ajax({ method: "POST", contentType: "application/json", url: "SetColor", data: JSON.stringify({ color: colors[(currentColor) % colors.length] }), cache: false });
        });
    });
 </script>
