@@ -6,25 +6,29 @@ import uuid
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
+import tornado.escape
 import tornado.web
 
+from tornado.escape import json_encode
 from tornado.options import define, options
 
 define("port", default=8080, help="run on the given port", type=int)
+
+
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html")
 
-
 class IdHandler(tornado.web.RequestHandler):
     def get(self):
-        message = {
-            "id": str(uuid.uuid4()),
-        } 
+        clientid = { 'id': str(uuid.uuid4()) }
+        self.set_header('Content-Type', 'application/javascript')
+        self.write(json_encode(clientid))
 
 class ColorHandler(tornado.web.RequestHandler):
     def post(self):
+        print(self.request.body)
         data_json = tornado.escape.json_decode(self.request.body)
         #FIXME this is somehow broken
         #message = {

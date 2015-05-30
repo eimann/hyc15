@@ -32,7 +32,7 @@
 <script>
    $(document).ready(function(){
        $('#OkButton').click(function() {
-           $.post( "http://31.172.101.252:8080/SetColor", { 'color': colors[(currentColor - 1) % colors.length] } );
+	   $.ajax({ method: "POST", contentType: "application/json", url: "http://31.172.101.252:8080/SetColor", data: JSON.stringify({ color: colors[(currentColor - 1) % colors.length] }), cache: false });
        });
    });
 </script>
