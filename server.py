@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+import os.path
+import logging
+import uuid
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
@@ -9,10 +12,10 @@ from tornado.options import define, options
 
 define("port", default=8080, help="run on the given port", type=int)
 
-
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("This is the RevealYourCity backend service. Nothing to see here.")
+        self.render("index.html")
+
 
 class IdHandler(tornado.web.RequestHandler):
     def get(self):
@@ -22,14 +25,16 @@ class IdHandler(tornado.web.RequestHandler):
 
 class ColorHandler(tornado.web.RequestHandler):
     def post(self):
-        message = {
-            "id": str(uuid.uuid4()),
-            "color": self.get_argument("color"),
-        }
+        data_json = tornado.escape.json_decode(self.request.body)
+        #FIXME this is somehow broken
+        #message = {
+        #    "id": str(uuid.uuid4()),
+        #    "color": self.post_argument("color"),
+        #}
         # to_basestring is necessary for Python 3's json encoder,
         # which doesn't accept byte strings.
-        message = tornado.escape.to_basestring(
-        self.write(color))
+        #message = tornado.escape.to_basestring(
+        #self.write(color))
 
 def main():
     tornado.options.parse_command_line()
@@ -37,7 +42,9 @@ def main():
         (r"/", MainHandler),
         (r"/GetId", IdHandler),
         (r"/SetColor", ColorHandler),
-    ])
+        (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': "static"}),
+    ],
+    )
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.current().start()
