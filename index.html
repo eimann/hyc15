@@ -32,8 +32,8 @@
 <script>
      currentColor+=1;
    // fetch client Id from server
-   $.getJSON( "GetId", { get_param: 'id' }, function(data) { $.each(data, function(index, element) { $('body').append($('<div>', { text: element.name })); }); });
-
+   $.getJSON( "GetId", success: function(clientid) { var id = clientid; $('#cand').html(clientid);   });
+   
    // post color and client Id to session database
    $(document).ready(function(){
        $('#OkButton').click(function() {
