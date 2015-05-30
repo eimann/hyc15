@@ -7,7 +7,7 @@ import tornado.web
 
 from tornado.options import define, options
 
-define("port", default=8000, help="run on the given port", type=int)
+define("port", default=8080, help="run on the given port", type=int)
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -29,8 +29,7 @@ class ColorHandler(tornado.web.RequestHandler):
         # to_basestring is necessary for Python 3's json encoder,
         # which doesn't accept byte strings.
         message = tornado.escape.to_basestring(
-        self.write(color)
-        global_message_buffer.new_messages([message]))
+        self.write(color))
 
 def main():
     tornado.options.parse_command_line()
