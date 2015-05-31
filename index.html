@@ -20,17 +20,15 @@
     ];
     var currentColor = 0;
     sense.fling(function(data){
-      $('body').css({"background": colors[currentColor % colors.length]});
       currentColor+=1;
+      $('body').css({"background": colors[currentColor % colors.length]});
     });
   </script>
 </head>
-<body style="background:#FF4444">
+<body style="background:#33B5E5">
 
 <button id="OkButton">OK</button>
 <script>
-   // set current color so we don't have an empty color on first load
-   currentColor+=1;
    
    // fetch client Id from server
    var id = false;
