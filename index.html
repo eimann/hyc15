@@ -32,12 +32,13 @@
 <script>
      currentColor+=1;
    // fetch client Id from server
-   $.getJSON( "GetId", success: function(clientid) { var id = clientid; $('#cand').html(clientid);   });
+   var id = '';
+   $.ajax({ url: "GetId", dataType: "json", success: function(data) { id = $.parseJSON(data) }});
    
    // post color and client Id to session database
    $(document).ready(function(){
        $('#OkButton').click(function() {
-	   $.ajax({ method: "POST", contentType: "application/json", url: "SetColor", data: JSON.stringify({ color: colors[(currentColor) % colors.length] }), cache: false });
+	   $.ajax({ method: "POST", contentType: "application/json", url: "SetColor", data: JSON.stringify({ id: id, color: colors[(currentColor) % colors.length] }), cache: false });
        });
    });
 </script>

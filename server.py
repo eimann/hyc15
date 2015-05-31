@@ -15,10 +15,14 @@ from tornado.options import define, options
 define("port", default=8080, help="run on the given port", type=int)
 
 
+# The MainHandler returns the index.html to the client
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html")
+
+# The IdHandler generates a specific UUID for the client to track its state
+# TODO: the UUID should be saved in Redis to persist state for the client during the game and for 30 minutes after the game ended
 
 class IdHandler(tornado.web.RequestHandler):
     def get(self):
@@ -26,22 +30,17 @@ class IdHandler(tornado.web.RequestHandler):
         self.set_header('Content-Type', 'application/javascript')
         self.write(json_encode(clientid))
 
+# The ColorHandler receives the color value selected by the client and saves it with the client Id in the Redis database
+
 class ColorHandler(tornado.web.RequestHandler):
     def post(self):
         print(self.request.body)
         data_json = tornado.escape.json_decode(self.request.body)
-        #FIXME this is somehow broken
-        #message = {
-        #    "id": str(uuid.uuid4()),
-        #    "color": self.post_argument("color"),
-        #}
-        # to_basestring is necessary for Python 3's json encoder,
-        # which doesn't accept byte strings.
-        #message = tornado.escape.to_basestring(
-        #self.write(color))
+        # TODO: parsing works, Redis code goes here
 
 def main():
     tornado.options.parse_command_line()
+    # Define request routes to be available to the client
     application = tornado.web.Application([
         (r"/", MainHandler),
         (r"/GetId", IdHandler),
