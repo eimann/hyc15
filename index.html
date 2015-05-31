@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -30,17 +29,37 @@
 
 <button id="OkButton">OK</button>
 <script>
-     currentColor+=1;
-   // fetch client Id from server
-   var id = '';
-   $.ajax({ url: "GetId", dataType: "json", success: function(data) { id = $.parseJSON(data) }});
+   // set current color so we don't have an empty color on first load
+   currentColor+=1;
    
-   // post color and client Id to session database
-   $(document).ready(function(){
+   // fetch client Id from server
+   var id = false;
+   $.ajax({
+        url: "GetId",
+        dataType: "json",
+        success: function(data) {
+            id = data.id;
+        }
+    });
+   
+   // post client Id and color to session database
+   $(document).ready(function() {
        $('#OkButton').click(function() {
-	   $.ajax({ method: "POST", contentType: "application/json", url: "SetColor", data: JSON.stringify({ id: id, color: colors[(currentColor) % colors.length] }), cache: false });
+           if(id === false) {
+               alert('Keine ID!');
+               return;
+           }
+           
+           $.ajax({
+                method: "POST",
+                contentType: "application/json",
+                url: "SetColor",
+                data: JSON.stringify({ id: id, color: colors[(currentColor) % colors.length] }),
+                cache: false
+         });
        });
    });
+
 </script>
 
 </body>
